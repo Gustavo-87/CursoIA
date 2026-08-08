@@ -1,6 +1,6 @@
 # PROYECTOS ELEGIDOS:
 
-## Clasificación automática de preguntas
+## 1.Clasificación automática de preguntas
 
 Este proyecto busca identificar automáticamente el tipo o categoría de una pregunta escrita por un estudiante, por ejemplo: matemáticas, programación, historia o soporte académico. Para desarrollarlo se necesitarían preguntas previamente clasificadas por categoría. 
 Se podría utilizar **Naive Bayes**, un modelo de aprendizaje automático que clasifica información utilizando probabilidades. En este caso, aprendería qué palabras aparecen con mayor frecuencia en cada categoría y, al recibir una nueva pregunta, calcularía a cuál categoría es más probable que pertenezca. Es un modelo sencillo, rápido y utilizado comúnmente para clasificación de textos.
