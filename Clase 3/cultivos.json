@@ -1,0 +1,17 @@
+[
+    {
+        "nombre": "Café",
+        "hectareas": 5,
+        "produccion_toneladas": 3.2
+    },
+    {
+        "nombre": "Caña",
+        "hectareas": 10,
+        "produccion_toneladas": 8.5
+    },
+    {
+        "nombre": "Maíz",
+        "hectareas": 3,
+        "produccion_toneladas": 1.8
+    }
+]

@@ -1,0 +1,2 @@
+Hola, estoy aprendiendo manejo de archivos en Python.
+Esta es la segunda línea del archivo.

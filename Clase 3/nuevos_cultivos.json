@@ -1,0 +1,12 @@
+[
+    {
+        "nombre": "Cacao",
+        "hectareas": 8,
+        "produccion_toneladas": 3.5
+    },
+    {
+        "nombre": "Palma",
+        "hectareas": 12,
+        "produccion_toneladas": 7.2
+    }
+]
