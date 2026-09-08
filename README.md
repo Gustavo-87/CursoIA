@@ -77,7 +77,11 @@ Para la variable `cantidad_adjuntos`:
 
 El análisis genera dos gráficos:
 
+![Histograma de días abiertos](data/eda/histograma_dias_abierta.png)
+
 - `data/eda/histograma_dias_abierta.png`: muestra la distribución del tiempo que permanecen abiertas las PQRS.
+
+![Relación entre adjuntos y días abiertos](data/eda/dias_vs_adjuntos.png)
 - `data/eda/dias_vs_adjuntos.png`: muestra la relación entre la cantidad de adjuntos y los días que permanece abierta cada PQRS.
 
 ### Patrones y relaciones encontradas
