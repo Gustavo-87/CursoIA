@@ -1,0 +1,16 @@
+{
+    "dias_abierta": {
+        "media": 8.6,
+        "mediana": 8.0,
+        "desviacion_estandar": 4.409081537009721,
+        "minimo": 3.0,
+        "maximo": 15.0
+    },
+    "cantidad_adjuntos": {
+        "media": 2.0,
+        "mediana": 2.0,
+        "desviacion_estandar": 1.4142135623730951,
+        "minimo": 0.0,
+        "maximo": 4.0
+    }
+}
