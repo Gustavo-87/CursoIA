@@ -1,14 +1,18 @@
 import csv
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+
+BASE_DIR = Path(__file__).resolve().parents[1]
 
 
 def cargar_pqrs():
     """Carga el archivo CSV como una lista de diccionarios."""
     datos = []
 
-    with open("data/pqrs.csv", "r", encoding="utf-8") as archivo:
+    with open(BASE_DIR / "data" / "pqrs.csv", "r", encoding="utf-8") as archivo:
         lector = csv.DictReader(archivo)
 
         for fila in lector:
@@ -43,7 +47,7 @@ plt.title("Cantidad de PQRS por tipo")
 plt.xlabel("Tipo de PQRS")
 plt.ylabel("Cantidad")
 plt.tight_layout()
-plt.savefig("grafico_pqrs.png")
+plt.savefig(BASE_DIR / "grafico_pqrs.png")
 plt.show()
 
 tipo_mas_frecuente = max(conteo_tipos, key=conteo_tipos.get)

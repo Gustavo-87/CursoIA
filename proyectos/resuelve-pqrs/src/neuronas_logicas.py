@@ -2,7 +2,12 @@
 Implementación de las compuertas lógicas OR y NOT.
 """
 
+from pathlib import Path
+
 import matplotlib.pyplot as plt
+
+
+BASE_DIR = Path(__file__).resolve().parents[1]
 
 
 def escalon(z):
@@ -73,7 +78,7 @@ plt.title("Evolución del Error - Compuerta OR")
 plt.xlabel("Época")
 plt.ylabel("Error Total")
 plt.grid(True)
-plt.savefig("evolucion_error_or.png", dpi=150)
+plt.savefig(BASE_DIR / "evolucion_error_or.png", dpi=150)
 plt.close()
 
 print("Gráfico guardado: evolucion_error_or.png")
@@ -137,7 +142,7 @@ plt.title("Evolución del Error - Compuerta NOT")
 plt.xlabel("Época")
 plt.ylabel("Error Total")
 plt.grid(True)
-plt.savefig("evolucion_error_not.png", dpi=150)
+plt.savefig(BASE_DIR / "evolucion_error_not.png", dpi=150)
 plt.close()
 
 print("Gráfico guardado: evolucion_error_not.png")

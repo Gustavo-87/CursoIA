@@ -8,7 +8,13 @@ No se usan librerías externas, solo Python puro.
 # ============================================================
 # 1. Definir la función de activación (escalón)
 # ============================================================
+from pathlib import Path
+
 import matplotlib.pyplot as plt
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+
+
 def escalon(z):
     """Función de activación escalón."""
     return 1 if z >= 0 else 0
@@ -106,7 +112,7 @@ plt.title("Evolución del Error durante el Entrenamiento")
 plt.xlabel("Época")
 plt.ylabel("Error Total")
 plt.grid(True)
-plt.savefig("evolucion_error.png", dpi=150)
+plt.savefig(BASE_DIR / "evolucion_error.png", dpi=150)
 plt.close()
 
 print("Gráfico guardado: evolucion_error.png")

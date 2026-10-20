@@ -1,9 +1,13 @@
+from pathlib import Path
+
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 sns.set_theme(style="whitegrid", context="talk")
+
+BASE_DIR = Path(__file__).resolve().parents[1]
 
 def cargar_datos(archivo_csv):
     """Carga el archivo CSV de PQRS como un DataFrame."""
@@ -71,7 +75,7 @@ def visualizar_datos(df):
     plt.xlabel("Días desde la radicación")
     plt.ylabel("Cantidad de PQRS")
     plt.tight_layout()
-    plt.savefig("histograma_dias_pqrs.png", dpi=150)
+    plt.savefig(BASE_DIR / "histograma_dias_pqrs.png", dpi=150)
     plt.close()
 
     plt.figure(figsize=(8, 5))
@@ -86,7 +90,7 @@ def visualizar_datos(df):
     plt.xlabel("Tipo de PQRS")
     plt.ylabel("Cantidad")
     plt.tight_layout()
-    plt.savefig("pqrs_por_tipo.png", dpi=150)
+    plt.savefig(BASE_DIR / "pqrs_por_tipo.png", dpi=150)
     plt.close()
 
     print("Gráfico guardado: pqrs_por_tipo.png")
@@ -105,7 +109,7 @@ def visualizar_datos(df):
     plt.xlabel("Días desde la radicación")
     plt.ylabel("Caracteres de la descripción")
     plt.tight_layout()
-    plt.savefig("antiguedad_vs_descripcion.png", dpi=150)
+    plt.savefig(BASE_DIR / "antiguedad_vs_descripcion.png", dpi=150)
     plt.close()
 
     print("Gráfico guardado: antiguedad_vs_descripcion.png")
@@ -136,7 +140,7 @@ def main():
     print("PREPARACIÓN DE DATOS DE PQRS")
     print("=" * 60)
 
-    df = cargar_datos("data/pqrs.csv")
+    df = cargar_datos(BASE_DIR / "data" / "pqrs.csv")
 
     if df is None:
         return
@@ -148,7 +152,7 @@ def main():
     visualizar_datos(df_limpio)
 
     df_ml = preparar_ml(df_limpio)
-    df_ml.to_csv("data/pqrs_preparadas_ml.csv", index=False)
+    df_ml.to_csv(BASE_DIR / "data" / "pqrs_preparadas_ml.csv", index=False)
 
     print("\nArchivo creado: data/pqrs_preparadas_ml.csv")
     print("Proceso completado.")
