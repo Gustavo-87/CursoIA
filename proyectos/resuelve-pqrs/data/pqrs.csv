@@ -1,0 +1,13 @@
+radicado,tipo,estado,dias_desde_radicacion,asunto,descripcion
+PQR-0001,Reclamo,Radicada,2,Luminaria apagada en el pasillo de la torre B,La lámpara del segundo piso no enciende desde hace tres noches y el pasillo queda oscuro.
+PQR-0002,Queja,En revisión,7,Ruido recurrente después de las 11 p. m.,Se presentan reuniones con música alta los fines de semana.
+PQR-0003,Petición,Respondida,12,Certificado de paz y salvo para trámite bancario,Solicitud de certificado de paz y salvo para realizar un trámite bancario.
+PQR-0004,Reclamo,En revisión,18,Humedad en el muro del parqueadero,Después de las lluvias aparece una filtración que alcanza el espacio de estacionamiento.
+PQR-0005,Sugerencia,Radicada,25,Instalación de bicicletero cubierto,Propuesta para adecuar un espacio cubierto para bicicletas junto al salón comunal.
+PQR-0006,Solicitud,Cerrada,32,Actualización de datos para ingreso de visitante,Solicitud para registrar una persona autorizada para acompañar a un adulto mayor.
+PQR-0007,Reclamo,Respondida,48,Intermitencia en el citófono,El citófono recibe llamadas pero no permite abrir la puerta desde el apartamento.
+PQR-0008,Petición,En revisión,64,Revisión de árboles junto a la zona infantil,Una rama seca está inclinada hacia los juegos y requiere revisión preventiva.
+PQR-0009,Sugerencia,Cerrada,80,Mejora de señalización para reciclaje,Propuesta para instalar avisos claros para separar los residuos.
+PQR-0010,Reclamo,Respondida,105,Cobro duplicado de parqueadero,La cuota de parqueadero aparece dos veces en el estado de cuenta.
+PQR-0011,Solicitud,Radicada,130,Reserva del salón comunal,Solicitud de disponibilidad y requisitos para reservar el salón comunal.
+PQR-0012,Queja,Cerrada,155,Reparación de fuga en zona de lavado común,Se observa goteo constante y acumulación de agua en el piso.
