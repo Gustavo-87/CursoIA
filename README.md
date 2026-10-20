@@ -104,3 +104,49 @@ El análisis exploratorio permite identificar variables que podrían ser útiles
 Variables como el tiempo de apertura, la cantidad de adjuntos, el tipo de solicitud y el estado podrían utilizarse posteriormente para identificar patrones, clasificar solicitudes o estimar cuáles PQRS pueden requerir mayor atención.
 
 Antes de construir un modelo predictivo será necesario disponer de una mayor cantidad de registros y evaluar otras variables relevantes del proceso de gestión de PQRS.
+
+## Avance 2
+
+El segundo corte se desarrolla en [`proyectos/resuelve-pqrs/`](proyectos/resuelve-pqrs/README.md#avance-2),
+separado de los ejercicios de clase y sin modificar Resuelve ERP.
+
+- **Preparación:** se conservan los 12 registros sintéticos originales y se
+  documentan etiquetas académicas `prioridad_alta` (0 = media/baja; 1 = alta).
+  Pandas verifica estructura, tipos, nulos, duplicados e inconsistencias.
+  No fueron necesarias correcciones: antes 12×6 y después 12×8, sin nulos.
+  Las clases contienen 8 casos de clase 0 y 4 de clase 1.
+- **Visualizaciones:** tres gráficos Seaborn con interpretaciones: histograma
+  de días, conteo por tipo y dispersión días–longitud según prioridad.
+  Se conservan los gráficos y datasets de etapas anteriores.
+- **Perceptrón sigmoide:** dos entradas estandarizadas (`dias_desde_radicacion`
+  y `longitud_descripcion`), pérdida logarítmica y descenso del gradiente con
+  NumPy, sin Scikit-Learn. Se usan 10000 épocas, tasa 0.1 e inicio en cero.
+- **Resultados:** `w1=1.5041201103`, `w2=1.9560568515`, `b=-1.1298185501`;
+  pérdida de `0.6931471806` a `0.5270863308`; exactitud de entrenamiento
+  **75 % (9/12)**. El conjunto no es linealmente separable y no se ha medido
+  generalización sobre datos independientes.
+- **Verificación:** 19 pruebas aprobadas en Docker (Python 3.13.16),
+  reproducibilidad numérica y de gráficos comprobada en dos ejecuciones.
+
+### Ejecución en Docker
+
+Desde la raíz de **CursoIA**, con Docker iniciado y el servicio único `python`:
+
+```bash
+docker compose build
+docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/preparacion_pqrs.py --segundo-corte
+docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/preparacion_pqrs.py --visualizaciones-segundo-corte
+docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/perceptron_proyecto.py
+docker compose run --rm -e MPLBACKEND=Agg python python -m unittest discover -s proyectos/resuelve-pqrs/tests -v
+```
+
+Los CSV preparados están en `proyectos/resuelve-pqrs/data/`. Los gráficos e
+interpretaciones están en
+[`informes/segundo_corte/interpretaciones.md`](proyectos/resuelve-pqrs/informes/segundo_corte/interpretaciones.md)
+y el análisis del modelo en
+[`perceptron/interpretacion.md`](proyectos/resuelve-pqrs/informes/segundo_corte/perceptron/interpretacion.md).
+Los comandos regeneran únicamente los archivos de su etapa, no el CSV original.
+
+Los resultados son académicos: muestra pequeña, sintética, desbalanceada y
+etiquetas subjetivas. No justifican uso operativo. La publicación en GitHub
+queda pendiente de autorización; no se generan PDF ni video en este avance.
