@@ -40,6 +40,11 @@ CursoIA/
 │   ├── cargar_datos.py
 │   ├── gestion_pqrs.py
 │   └── main.py
+├── proyectos/
+│   └── resuelve-pqrs/          # proyecto de IA aplicado a Resuelve
+│       ├── src/                # análisis, preparación ML y neuronas lógicas
+│       ├── data/               # datasets propios del proyecto (separados de data/)
+│       └── README.md           # problemática y alcance del proyecto
 ├── Dockerfile
 ├── docker-compose.yml
 └── requirements.txt
