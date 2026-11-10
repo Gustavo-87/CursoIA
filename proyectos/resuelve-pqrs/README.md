@@ -362,3 +362,94 @@ pruebas y documentación, sin reescribir el historial previo.
 
 La publicación de estos commits en GitHub queda pendiente de autorización.
 No se generan PDF ni video ni se incorporan funcionalidades adicionales.
+
+
+## Clase 12 - Scikit-Learn y modelo final de PQRS
+
+### Objetivo
+
+Entrenar y comparar modelos de clasificación para estimar si una PQRS
+tiene prioridad alta, utilizando los datos preparados en el Avance 2.
+
+### Datos utilizados
+
+Archivo: `data/pqrs_ml_segundo_corte.csv`
+
+- Registros: 12 casos sintéticos.
+- Entradas: `dias_desde_radicacion` y `longitud_descripcion`.
+- Objetivo: `prioridad_alta` (0 = no alta, 1 = alta).
+
+### Modelos evaluados
+
+Se utilizaron tres clasificadores de Scikit-Learn:
+
+1. Regresión logística.
+2. K vecinos más cercanos (KNN).
+3. Árbol de decisión.
+
+Cada modelo utiliza un Pipeline con StandardScaler.
+
+Los datos se dividieron en 80 % para entrenamiento y 20 % para prueba,
+con `random_state=42` y estratificación.
+
+### Resultados
+
+| Modelo | Exactitud | Precisión | Recall | F1 | Validación cruzada |
+|---|---:|---:|---:|---:|---:|
+| Regresión logística | 0.667 | 0.000 | 0.000 | 0.000 | 0.556 |
+| KNN | 0.667 | 0.000 | 0.000 | 0.000 | 0.556 |
+| Árbol de decisión | 0.667 | 0.000 | 0.000 | 0.000 | 0.667 |
+
+Se seleccionó el árbol de decisión por obtener la mayor exactitud
+promedio en la validación cruzada.
+
+Matriz de confusión del modelo seleccionado:
+
+| Real / Predicho | No alta | Alta |
+|---|---:|---:|
+| No alta | 2 | 0 |
+| Alta | 1 | 0 |
+
+El modelo no identificó correctamente el caso de prioridad alta
+presente en el conjunto de prueba.
+
+### Comparación con el perceptrón del Avance 2
+
+El perceptrón implementado con NumPy obtuvo una exactitud de
+entrenamiento del 75 % (9 de 12 registros).
+
+El árbol de decisión obtuvo una exactitud de prueba del 66,7 %
+(2 de 3 registros).
+
+Estas métricas no son directamente comparables porque el perceptrón
+fue evaluado sobre los datos utilizados para entrenarlo, mientras
+que Scikit-Learn utilizó un conjunto independiente de prueba.
+
+### Ejecución
+
+Desde la raíz de CursoIA, con el contenedor iniciado:
+
+```bash
+docker exec ia_python python proyectos/resuelve-pqrs/src/modelo_proyecto.py
+docker exec ia_python python proyectos/resuelve-pqrs/src/usar_modelo.py
+```
+
+El primer script entrena, compara y guarda el modelo en
+`modelo_pqrs_final.joblib`.
+
+El segundo carga el modelo guardado y realiza predicciones
+sobre tres casos nuevos sin volver a entrenarlo.
+
+### Limitaciones
+
+Los 12 registros son sintéticos y las etiquetas de prioridad
+responden a criterios académicos.
+
+El conjunto de prueba contiene únicamente tres registros, por
+lo que las métricas no permiten establecer un rendimiento confiable.
+
+Las probabilidades generadas por el modelo no están calibradas.
+
+El modelo constituye una demostración académica y no debe
+utilizarse para asignar prioridades reales de PQRS sin disponer
+de datos suficientes, etiquetas verificadas y evaluación adicional.
