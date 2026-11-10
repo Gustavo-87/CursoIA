@@ -1,0 +1,121 @@
+radicado,tipo,dias_abierta,cantidad_adjuntos,estado
+PQRS-001,Petición,27,0,En revisión
+PQRS-002,Sugerencia,41,3,En revisión
+PQRS-003,Reclamo,40,0,En revisión
+PQRS-004,Queja,29,3,Cerrada
+PQRS-005,Queja,52,3,Cerrada
+PQRS-006,Sugerencia,34,0,Radicada
+PQRS-007,Petición,5,4,En revisión
+PQRS-008,Reclamo,46,2,Cerrada
+PQRS-009,Petición,35,4,Cerrada
+PQRS-010,Petición,39,0,En revisión
+PQRS-011,Reclamo,34,1,Radicada
+PQRS-012,Sugerencia,34,2,Radicada
+PQRS-013,Reclamo,6,1,En revisión
+PQRS-014,Sugerencia,34,1,Cerrada
+PQRS-015,Reclamo,48,3,En revisión
+PQRS-016,Sugerencia,19,0,Radicada
+PQRS-017,Reclamo,37,4,Cerrada
+PQRS-018,Petición,2,0,Radicada
+PQRS-019,Sugerencia,21,1,Radicada
+PQRS-020,Queja,27,3,En revisión
+PQRS-021,Reclamo,59,4,Cerrada
+PQRS-022,Queja,13,1,Radicada
+PQRS-023,Petición,17,1,Radicada
+PQRS-024,Sugerencia,25,5,En revisión
+PQRS-025,Sugerencia,60,5,Cerrada
+PQRS-026,Reclamo,52,3,Cerrada
+PQRS-027,Queja,3,2,Radicada
+PQRS-028,Sugerencia,15,2,Radicada
+PQRS-029,Reclamo,50,3,Cerrada
+PQRS-030,Queja,4,3,Radicada
+PQRS-031,Queja,52,1,En revisión
+PQRS-032,Petición,17,0,Radicada
+PQRS-033,Petición,56,0,En revisión
+PQRS-034,Reclamo,18,5,En revisión
+PQRS-035,Sugerencia,27,2,Radicada
+PQRS-036,Petición,40,2,En revisión
+PQRS-037,Sugerencia,8,2,Radicada
+PQRS-038,Sugerencia,34,4,En revisión
+PQRS-039,Queja,31,0,En revisión
+PQRS-040,Reclamo,48,0,Cerrada
+PQRS-041,Petición,60,1,Cerrada
+PQRS-042,Sugerencia,40,2,En revisión
+PQRS-043,Reclamo,25,4,Radicada
+PQRS-044,Queja,25,2,Radicada
+PQRS-045,Petición,26,2,En revisión
+PQRS-046,Sugerencia,49,5,Cerrada
+PQRS-047,Queja,20,0,Radicada
+PQRS-048,Sugerencia,11,3,Radicada
+PQRS-049,Reclamo,21,3,En revisión
+PQRS-050,Sugerencia,2,2,Cerrada
+PQRS-051,Sugerencia,7,4,Cerrada
+PQRS-052,Petición,6,1,Radicada
+PQRS-053,Queja,47,5,En revisión
+PQRS-054,Queja,44,1,Radicada
+PQRS-055,Queja,42,3,En revisión
+PQRS-056,Petición,28,3,En revisión
+PQRS-057,Reclamo,44,5,Cerrada
+PQRS-058,Petición,10,2,Radicada
+PQRS-059,Reclamo,55,1,En revisión
+PQRS-060,Reclamo,31,0,Radicada
+PQRS-061,Sugerencia,57,2,Cerrada
+PQRS-062,Reclamo,10,4,Radicada
+PQRS-063,Queja,30,0,Radicada
+PQRS-064,Sugerencia,42,5,En revisión
+PQRS-065,Queja,30,3,En revisión
+PQRS-066,Queja,27,0,Radicada
+PQRS-067,Sugerencia,10,1,Radicada
+PQRS-068,Queja,23,3,Cerrada
+PQRS-069,Petición,15,1,Radicada
+PQRS-070,Queja,19,0,Radicada
+PQRS-071,Sugerencia,42,3,Cerrada
+PQRS-072,Petición,38,4,Cerrada
+PQRS-073,Queja,37,0,Radicada
+PQRS-074,Petición,22,1,Radicada
+PQRS-075,Reclamo,58,1,Cerrada
+PQRS-076,Queja,6,3,En revisión
+PQRS-077,Queja,21,4,Radicada
+PQRS-078,Petición,8,4,Radicada
+PQRS-079,Reclamo,21,5,En revisión
+PQRS-080,Reclamo,58,4,Cerrada
+PQRS-081,Sugerencia,22,1,Radicada
+PQRS-082,Queja,55,0,En revisión
+PQRS-083,Petición,30,3,Radicada
+PQRS-084,Sugerencia,42,5,En revisión
+PQRS-085,Reclamo,28,5,En revisión
+PQRS-086,Reclamo,16,1,Radicada
+PQRS-087,Petición,46,1,En revisión
+PQRS-088,Queja,59,0,Cerrada
+PQRS-089,Sugerencia,16,0,En revisión
+PQRS-090,Sugerencia,47,3,Cerrada
+PQRS-091,Queja,16,3,En revisión
+PQRS-092,Sugerencia,44,2,En revisión
+PQRS-093,Sugerencia,48,1,En revisión
+PQRS-094,Queja,27,4,Radicada
+PQRS-095,Sugerencia,45,2,Cerrada
+PQRS-096,Queja,17,4,Radicada
+PQRS-097,Petición,5,5,Cerrada
+PQRS-098,Reclamo,6,1,En revisión
+PQRS-099,Reclamo,27,1,En revisión
+PQRS-100,Petición,55,5,En revisión
+PQRS-101,Sugerencia,8,3,Radicada
+PQRS-102,Petición,28,1,En revisión
+PQRS-103,Sugerencia,43,3,Cerrada
+PQRS-104,Petición,13,3,En revisión
+PQRS-105,Sugerencia,44,5,Radicada
+PQRS-106,Sugerencia,19,1,En revisión
+PQRS-107,Sugerencia,49,5,Cerrada
+PQRS-108,Reclamo,35,5,Radicada
+PQRS-109,Queja,33,1,Radicada
+PQRS-110,Reclamo,11,0,Radicada
+PQRS-111,Queja,28,3,En revisión
+PQRS-112,Sugerencia,52,0,En revisión
+PQRS-113,Reclamo,2,1,Radicada
+PQRS-114,Queja,46,2,En revisión
+PQRS-115,Reclamo,30,5,En revisión
+PQRS-116,Reclamo,44,5,Cerrada
+PQRS-117,Petición,40,0,Radicada
+PQRS-118,Petición,26,5,En revisión
+PQRS-119,Petición,19,0,Radicada
+PQRS-120,Petición,38,4,En revisión
