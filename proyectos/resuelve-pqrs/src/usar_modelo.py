@@ -12,7 +12,9 @@ modelo = joblib.load(BASE_DIR / "modelo_pqrs_final.joblib")
 # 2. Crear tres PQRS nuevas con datos simulados
 nuevas_pqrs = pd.DataFrame({
     "dias_desde_radicacion": [5, 45, 120],
-    "longitud_descripcion": [90, 65, 75]
+    "longitud_descripcion": [90, 65, 75],
+    "cantidad_adjuntos": [1, 3, 5],
+    "tipo": ["Petición", "Queja", "Reclamo"]
 })
 
 # 3. Predecir prioridad alta (0 o 1)
