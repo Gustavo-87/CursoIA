@@ -3,16 +3,13 @@ from pathlib import Path
 
 import joblib
 import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.metrics import ConfusionMatrixDisplay
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -27,7 +24,7 @@ DATASET = BASE_DIR / "data" / "pqrs_final_150.csv"
 # 1. Cargar datos originales del Avance 2
 df = pd.read_csv(DATASET)
 
-columnas = ["dias_desde_radicacion", "longitud_descripcion", "cantidad_adjuntos", "tipo"]
+columnas = ["dias_desde_radicacion", "longitud_descripcion"]
 X = df[columnas]
 y = df["prioridad_alta"]
 
@@ -41,29 +38,21 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 print(f"Entrenamiento: {len(X_train)} | Prueba: {len(X_test)}")
 
-# 3. Preparación y modelos
-def crear_preprocesador():
-    return ColumnTransformer([
-        ("numericas", StandardScaler(), [
-            "dias_desde_radicacion",
-            "longitud_descripcion",
-            "cantidad_adjuntos"
-        ]),
-        ("categorica", OneHotEncoder(handle_unknown="ignore"), ["tipo"])
-    ])
-
+# 3. Definir tres modelos
 modelos = {
     "Regresión logística": Pipeline([
-        ("preparacion", crear_preprocesador()),
+        ("escalado", StandardScaler()),
         ("modelo", LogisticRegression(max_iter=1000))
     ]),
     "KNN": Pipeline([
-        ("preparacion", crear_preprocesador()),
+        ("escalado", StandardScaler()),
         ("modelo", KNeighborsClassifier(n_neighbors=3))
     ]),
     "Árbol de decisión": Pipeline([
-        ("preparacion", crear_preprocesador()),
-        ("modelo", DecisionTreeClassifier(max_depth=3, random_state=42))
+        ("escalado", StandardScaler()),
+        ("modelo", DecisionTreeClassifier(
+            max_depth=3, random_state=42
+        ))
     ])
 }
 
@@ -97,7 +86,7 @@ tabla = pd.DataFrame(resultados)
 print("\nComparación de modelos:")
 print(tabla.round(3).to_string(index=False))
 
-# 5. Seleccionar el mejor según validación cruzada
+# 5. Seleccionar el mejor modelo según F1 de validación cruzada
 nombre_mejor = tabla.loc[
     tabla["Val. cruzada"].idxmax(), "Modelo"
 ]
@@ -109,28 +98,6 @@ print("\nMatriz de confusión:")
 print(confusion_matrix(
     y_test, mejor_modelo.predict(X_test), labels=[0, 1]
 ))
-
-# Generar matriz de confusión
-matriz = confusion_matrix(
-    y_test, mejor_modelo.predict(X_test), labels=[0, 1]
-)
-
-fig, ax = plt.subplots(figsize=(6, 5))
-ConfusionMatrixDisplay(
-    confusion_matrix=matriz,
-    display_labels=["No alta", "Alta"]
-).plot(ax=ax, cmap="Blues", values_format="d", colorbar=False)
-
-ax.set_title(f"Matriz de confusión - {nombre_mejor}")
-fig.tight_layout()
-
-ruta_graficos = BASE_DIR / "graficos_final"
-ruta_graficos.mkdir(exist_ok=True)
-
-fig.savefig(ruta_graficos / "matriz_confusion.png", dpi=150)
-plt.close(fig)
-
-print("Gráfico guardado: graficos_final/matriz_confusion.png")
 
 # 6. Guardar el modelo
 ruta_modelo = BASE_DIR / "modelo_pqrs_final.joblib"
