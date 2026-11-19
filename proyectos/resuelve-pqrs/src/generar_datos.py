@@ -1,3 +1,14 @@
+"""Generación del dataset SINTÉTICO de 150 casos de PQRS (semilla fija 42).
+
+LIMITACIONES METODOLÓGICAS (visibles, no ocultar):
+- Datos SINTÉTICOS: no provienen de PQRS reales de conjuntos residenciales.
+- CIRCULARIDAD / FUGA METODOLÓGICA: la variable objetivo prioridad_alta se
+  calcula a partir de las MISMAS variables de entrada (días, longitud,
+  cantidad de adjuntos y tipo, más ruido). Entrenar un modelo con este
+  dataset solo reproduce esa regla artificial; NO demuestra capacidad
+  predictiva real. Debe declararse en todo informe o demostración.
+- Uso exclusivamente académico; no apto para operación real.
+"""
 
 from pathlib import Path
 
@@ -22,7 +33,9 @@ df = pd.DataFrame({
     "cantidad_adjuntos": rng.integers(0, 6, n)
 })
 
-# Regla académica para simular la prioridad
+# Regla académica para simular la prioridad.
+# CIRCULARIDAD / FUGA: prioridad_alta depende de las mismas variables de
+# entrada que se usarán para predecirla; ver docstring del módulo.
 puntaje = (
     0.025 * df["dias_desde_radicacion"]
     + 0.008 * df["longitud_descripcion"]
