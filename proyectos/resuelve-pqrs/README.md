@@ -14,18 +14,62 @@ Integrar un asistente de inteligencia artificial en la plataforma Resuelve que, 
 
 ## Datos
 
-Para este primer avance se utiliza un archivo CSV con 12 datos sintéticos, adaptados de los casos de demostración de Resuelve. La plataforma aún no está desplegada en conjuntos residenciales y, por tanto, no cuenta con registros operativos de residentes.
+La documentación completa de los datos —diccionario de variables, generación
+sintética, privacidad y limitaciones— está en [`data/README.md`](data/README.md).
 
-El conjunto de datos representará solicitudes habituales presentadas por residentes y contendrá campos como:
+### Datos sintéticos iniciales (12 casos)
 
-- Número de radicado.
-- Asunto de la solicitud.
-- Tipo de PQRS.
-- Estado.
-- Días transcurridos desde la radicación.
-- Descripción de la solicitud.
+Para el primer avance se utilizó un archivo CSV con 12 datos sintéticos, adaptados de los casos de demostración de Resuelve. La plataforma aún no está desplegada en conjuntos residenciales y, por tanto, no cuenta con registros operativos de residentes.
+
+El conjunto de datos representa solicitudes habituales presentadas por residentes y contiene campos como el número de radicado, el asunto, el tipo de PQRS, el estado, los días transcurridos desde la radicación y la descripción de la solicitud.
 
 El uso de datos sintéticos permite representar escenarios realistas, desarrollar el análisis inicial y proteger la información personal y confidencial de los residentes.
+
+### Dataset final del modelo (`data/pqrs_final_150.csv`)
+
+- **150 registros sintéticos**, generados de forma determinista con **semilla 42**
+  por `src/generar_datos.py`.
+- Distribución de la variable objetivo `prioridad_alta`:
+  **120 no alta (0)** y **30 alta (1)**.
+- **No contiene información personal real:** se creó para fines académicos
+  porque Resuelve aún no está desplegada en conjuntos residenciales y no
+  cuenta con registros operativos de residentes.
+
+#### Variables
+
+| Variable | Tipo | Descripción | Uso en el modelo |
+|---|---|---|---|
+| `dias_desde_radicacion` | Numérica (entero) | Días transcurridos desde la radicación de la PQRS. | Entrada numérica (estandarizada). |
+| `longitud_descripcion` | Numérica (entero) | Número de caracteres de la descripción de la solicitud. | Entrada numérica (estandarizada). |
+| `cantidad_adjuntos` | Numérica (entero) | Cantidad de archivos adjuntos asociados a la PQRS. | Entrada numérica (estandarizada). |
+| `tipo` | Categórica | Tipo de solicitud: Petición, Queja, Reclamo, Solicitud o Sugerencia. | Entrada categórica (one-hot). |
+| `prioridad_alta` | Binaria (0/1) | Etiqueta de prioridad: 1 = alta, 0 = no alta. | Variable objetivo; no es una entrada. |
+
+El detalle por variable (rangos, generación y uso) está en
+[`data/README.md`](data/README.md).
+
+#### Contrato de entrada único
+
+El modelo usa exactamente estas cuatro variables, con estos nombres y en este
+orden, tanto en `src/modelo_proyecto.py` (entrenamiento) como en
+`src/usar_modelo.py` (predicción):
+
+1. `dias_desde_radicacion`
+2. `longitud_descripcion`
+3. `cantidad_adjuntos`
+4. `tipo`
+
+#### Fuente, privacidad y limitaciones
+
+- No contiene información personal real de residentes.
+- Es un dataset sintético creado para fines académicos porque Resuelve aún no
+  está desplegada y no dispone de registros operativos.
+- **Circularidad metodológica:** `prioridad_alta` se generó a partir de las
+  mismas variables predictoras del modelo; existe una fuga de información
+  estructural entre las entradas y la etiqueta.
+- No es válido para uso en operación real.
+- Tamaño limitado (150 registros), desbalance de clases (120/30), recall bajo
+  de la clase prioridad alta y probabilidades no calibradas.
 
 ## Análisis exploratorio de datos
 
@@ -85,15 +129,57 @@ python src/analisis_pqrs.py
 ## Estructura del proyecto
 
 ```text
-ia-gestion-pqrs/
+proyectos/resuelve-pqrs/
 ├── data/
-│   └── pqrs.csv
+│   ├── README.md                        # diccionario de variables y documentación de datos
+│   ├── pqrs.csv                         # 12 casos sintéticos iniciales (Avance 1)
+│   ├── etiquetas_prioridad.csv          # etiquetas manuales por radicado (Avance 2)
+│   ├── pqrs_preparadas_ml.csv           # dataset preparado en Clase 7
+│   ├── pqrs_limpias_segundo_corte.csv   # dataset limpio del Avance 2
+│   ├── pqrs_ml_segundo_corte.csv        # entradas y objetivo de los 12 casos
+│   ├── resumen_limpieza_segundo_corte.csv
+│   └── pqrs_final_150.csv               # dataset final del modelo (150 casos)
+├── graficos_final/
+│   ├── curva_perceptron.png             # curva de aprendizaje del perceptrón NumPy
+│   ├── matriz_confusion.png             # matriz de confusión del mejor modelo
+│   └── real_vs_predicho.png             # probabilidad predicha vs clase real
+├── informes/
+│   └── segundo_corte/
+│       ├── interpretaciones.md          # interpretación de los gráficos del Avance 2
+│       ├── histograma_dias_pqrs.png
+│       ├── pqrs_por_tipo.png
+│       ├── antiguedad_vs_descripcion.png
+│       └── perceptron/
+│           ├── interpretacion.md
+│           ├── curva_aprendizaje.png
+│           └── frontera_decision.png
 ├── src/
-│   └── analisis_pqrs.py
+│   ├── analisis_pqrs.py                 # análisis exploratorio inicial (NumPy/Matplotlib)
+│   ├── generar_datos.py                 # genera data/pqrs_final_150.csv (semilla 42)
+│   ├── modelo_proyecto.py               # entrena, compara y guarda el mejor modelo (joblib)
+│   ├── usar_modelo.py                   # carga el modelo y predice casos nuevos
+│   ├── perceptron_proyecto.py           # neurona sigmoide NumPy (Avance 2)
+│   ├── perceptron_final.py              # perceptrón NumPy sobre los 150 casos
+│   ├── preparacion_pqrs.py              # preparación y limpieza con Pandas
+│   ├── neurona_and.py                   # compuerta AND (Clase 8)
+│   └── neuronas_logicas.py              # compuertas OR y NOT (Clase 8)
+├── tests/
+│   ├── test_preparacion_pqrs.py
+│   ├── test_visualizaciones_pqrs.py
+│   └── test_perceptron_proyecto.py
+├── grafico_pqrs.png                     # gráfico histórico (Avance 1)
+├── histograma_dias_pqrs.png             # gráficos históricos en la raíz
+├── pqrs_por_tipo.png
+├── antiguedad_vs_descripcion.png
+├── evolucion_error.png                  # compuertas lógicas (Clase 8)
+├── evolucion_error_or.png
+├── evolucion_error_not.png
+├── modelo_pqrs_final.joblib             # mejor modelo guardado con joblib
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
 ├── .gitignore
-├── grafico_pqrs.png
-├── README.md
-└── requirements.txt
+└── README.md
 ```
 
 ## Tecnologías utilizadas
@@ -369,15 +455,18 @@ No se generan PDF ni video ni se incorporan funcionalidades adicionales.
 ### Objetivo
 
 Entrenar y comparar modelos de clasificación para estimar si una PQRS
-tiene prioridad alta, utilizando los datos preparados en el Avance 2.
+tiene prioridad alta, utilizando el dataset final `data/pqrs_final_150.csv`.
 
 ### Datos utilizados
 
-Archivo: `data/pqrs_ml_segundo_corte.csv`
+Archivo: `data/pqrs_final_150.csv` (150 registros sintéticos, semilla 42).
+La descripción completa de las variables, la fuente, la privacidad y las
+limitaciones está en la sección [Datos](#datos) y en
+[`data/README.md`](data/README.md).
 
-- Registros: 12 casos sintéticos.
-- Entradas: `dias_desde_radicacion` y `longitud_descripcion`.
-- Objetivo: `prioridad_alta` (0 = no alta, 1 = alta).
+- Entradas (contrato único): `dias_desde_radicacion`, `longitud_descripcion`,
+  `cantidad_adjuntos` y `tipo`.
+- Objetivo: `prioridad_alta` (0 = no alta, 1 = alta), con distribución 120/30.
 
 ### Modelos evaluados
 
@@ -387,69 +476,155 @@ Se utilizaron tres clasificadores de Scikit-Learn:
 2. K vecinos más cercanos (KNN).
 3. Árbol de decisión.
 
-Cada modelo utiliza un Pipeline con StandardScaler.
+Cada modelo se define dentro de un `Pipeline` reproducible que integra el
+preprocesamiento y el clasificador:
 
-Los datos se dividieron en 80 % para entrenamiento y 20 % para prueba,
-con `random_state=42` y estratificación.
+- Las variables numéricas (`dias_desde_radicacion`, `longitud_descripcion`,
+  `cantidad_adjuntos`) se estandarizan con `StandardScaler`.
+- La variable categórica `tipo` se codifica con `OneHotEncoder`, tolerante a
+  categorías no vistas durante el entrenamiento.
+
+Los datos se dividieron en 80 % para entrenamiento y 20 % para prueba
+(120 y 30 casos respectivamente), con `random_state=42` y estratificación.
+La selección del mejor modelo se realiza con validación cruzada de
+5 pliegues sobre los datos de entrenamiento.
 
 ### Resultados
 
-| Modelo | Exactitud | Precisión | Recall | F1 | Validación cruzada |
+Modelos evaluados sobre 30 casos de prueba:
+
+| Modelo | Exactitud | Precisión | Recall | F1 | F1 validación cruzada |
 |---|---:|---:|---:|---:|---:|
-| Regresión logística | 0.667 | 0.000 | 0.000 | 0.000 | 0.556 |
-| KNN | 0.667 | 0.000 | 0.000 | 0.000 | 0.556 |
-| Árbol de decisión | 0.667 | 0.000 | 0.000 | 0.000 | 0.667 |
+| Regresión logística | 0.767 | 0.400 | 0.333 | 0.364 | 0.433 |
+| KNN | 0.733 | 0.375 | 0.500 | 0.429 | 0.205 |
+| Árbol de decisión | 0.733 | 0.400 | 0.667 | 0.500 | 0.281 |
 
-Se seleccionó el árbol de decisión por obtener la mayor exactitud
-promedio en la validación cruzada.
+### Criterio de selección
 
-Matriz de confusión del modelo seleccionado:
+El modelo seleccionado es la **regresión logística** porque el criterio de
+selección fue definido previamente como el **mayor F1 promedio de validación
+cruzada** (0.433). El árbol de decisión obtuvo el mejor F1 en el conjunto de
+prueba (0.500), pero no fue seleccionado para evitar elegir el modelo después
+de observar el test: escoger por resultados de prueba convertiría el conjunto
+de prueba en parte del entrenamiento y sesgaría la evaluación.
+
+Matriz de confusión de la regresión logística (filas reales, columnas
+predichas, orden [0, 1]):
 
 | Real / Predicho | No alta | Alta |
 |---|---:|---:|
-| No alta | 2 | 0 |
-| Alta | 1 | 0 |
+| No alta | 21 | 3 |
+| Alta | 4 | 2 |
 
-El modelo no identificó correctamente el caso de prioridad alta
-presente en el conjunto de prueba.
+De los 6 casos reales de prioridad alta del conjunto de prueba, el modelo
+identificó correctamente 2 (recall de 0.333). La exactitud global (0.767)
+debe interpretarse con cautela por el desbalance de clases (120/30).
+
+### Gráficos de evaluación
+
+Los tres gráficos siguientes se regeneran desde el código con los comandos de
+la sección de ejecución.
+
+#### Curva de aprendizaje del perceptrón
+
+![Curva de aprendizaje del perceptrón](graficos_final/curva_perceptron.png)
+
+- Ruta: `graficos_final/curva_perceptron.png`
+- Pérdida logarítmica por época durante el entrenamiento del perceptrón
+  implementado con NumPy (`src/perceptron_final.py`). La pérdida desciende de
+  forma sostenida y se estabiliza, lo que muestra la convergencia del descenso
+  del gradiente; no es una medida de generalización.
+
+#### Matriz de confusión
+
+![Matriz de confusión](graficos_final/matriz_confusion.png)
+
+- Ruta: `graficos_final/matriz_confusion.png`
+- Comparación entre la clase real y la predicha por la regresión logística en
+  los 30 casos de prueba (21 verdaderos negativos, 3 falsos positivos,
+  4 falsos negativos y 2 verdaderos positivos). Muestra que el modelo reconoce
+  bien la clase mayoritaria "no alta", pero detecta solo 2 de los 6 casos de
+  prioridad alta.
+
+#### Real vs predicho
+
+![Real vs predicho](graficos_final/real_vs_predicho.png)
+
+- Ruta: `graficos_final/real_vs_predicho.png`
+- Cada punto es un caso de prueba: el eje X indica la clase real y el eje Y la
+  probabilidad predicha de prioridad alta. La línea discontinua es el umbral
+  de decisión (p = 0.5); los puntos azules son aciertos y los rojos errores.
+  Los errores se concentran cerca del umbral (3 falsos positivos sobre 0.5 en
+  la clase 0 y 4 falsos negativos bajo 0.5 en la clase 1); recuerda que las
+  probabilidades no están calibradas.
 
 ### Comparación con el perceptrón del Avance 2
 
-El perceptrón implementado con NumPy obtuvo una exactitud de
-entrenamiento del 75 % (9 de 12 registros).
+El perceptrón implementado con NumPy (Avance 2) obtuvo una exactitud de
+entrenamiento del 75 % (9 de 12 registros sintéticos).
 
-El árbol de decisión obtuvo una exactitud de prueba del 66,7 %
-(2 de 3 registros).
+La regresión logística del modelo final obtuvo una exactitud de prueba del
+0.767 (sobre 30 casos independientes del entrenamiento) en el dataset de
+150 registros.
 
 Estas métricas no son directamente comparables porque el perceptrón
-fue evaluado sobre los datos utilizados para entrenarlo, mientras
-que Scikit-Learn utilizó un conjunto independiente de prueba.
+fue evaluado sobre los datos utilizados para entrenarlo y sobre otro
+conjunto de datos (12 casos), mientras que Scikit-Learn utilizó un
+conjunto independiente de prueba (30 casos del dataset de 150).
 
 ### Ejecución
 
-Desde la raíz de CursoIA, con el contenedor iniciado:
+Desde la raíz de **CursoIA**, con Docker iniciado, esta es la cadena única y
+reproducible del modelo final (generación de datos, entrenamiento, gráficos y
+predicción):
 
 ```bash
-docker exec ia_python python proyectos/resuelve-pqrs/src/modelo_proyecto.py
-docker exec ia_python python proyectos/resuelve-pqrs/src/usar_modelo.py
+docker compose build
+docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/generar_datos.py
+docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/perceptron_final.py
+docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/modelo_proyecto.py
+docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/usar_modelo.py
 ```
 
-El primer script entrena, compara y guarda el modelo en
-`modelo_pqrs_final.joblib`.
+1. `generar_datos.py` crea `data/pqrs_final_150.csv` de forma determinista
+   (semilla 42); regenerarlo produce siempre el mismo archivo.
+2. `perceptron_final.py` entrena el perceptrón con NumPy y genera
+   `graficos_final/curva_perceptron.png`.
+3. `modelo_proyecto.py` entrena y compara los tres modelos, guarda el mejor
+   en `modelo_pqrs_final.joblib` y genera la matriz de confusión y el gráfico
+   de clase real frente a probabilidad predicha en `graficos_final/`.
+4. `usar_modelo.py` carga el modelo guardado y realiza predicciones sobre
+   tres casos nuevos **sin volver a entrenarlo**.
 
-El segundo carga el modelo guardado y realiza predicciones
-sobre tres casos nuevos sin volver a entrenarlo.
+#### Salida esperada de `usar_modelo.py`
+
+| dias_desde_radicacion | longitud_descripcion | cantidad_adjuntos | tipo | probabilidad_prioridad_alta_% | prioridad_predicha |
+|---:|---:|---:|---|---:|---|
+| 5 | 90 | 1 | Petición | 0.1 | No alta |
+| 45 | 65 | 3 | Queja | 1.1 | No alta |
+| 120 | 75 | 5 | Reclamo | 57.9 | Alta |
+
+Es decir: 5 días, longitud 90, 1 adjunto, Petición: 0.1 %, No alta;
+45 días, longitud 65, 3 adjuntos, Queja: 1.1 %, No alta;
+120 días, longitud 75, 5 adjuntos, Reclamo: 57.9 %, Alta.
 
 ### Limitaciones
 
-Los 12 registros son sintéticos y las etiquetas de prioridad
-responden a criterios académicos.
-
-El conjunto de prueba contiene únicamente tres registros, por
-lo que las métricas no permiten establecer un rendimiento confiable.
-
-Las probabilidades generadas por el modelo no están calibradas.
+- Los 150 registros son **sintéticos** y no provienen de PQRS reales.
+- **Circularidad metodológica:** `prioridad_alta` se generó a partir de las
+  mismas variables predictoras del modelo, por lo que existe una fuga de
+  información estructural entre las entradas y la etiqueta; las métricas
+  reflejan la recuperación de una regla artificial, no validez predictiva real.
+- El conjunto es limitado (150 registros) y está **desbalanceado (120/30)**.
+- El **recall de la clase prioridad alta es bajo (0.333)**: de 6 casos de
+  prueba de prioridad alta solo se detectaron 2.
+- Las probabilidades generadas por el modelo **no están calibradas**.
 
 El modelo constituye una demostración académica y no debe
 utilizarse para asignar prioridades reales de PQRS sin disponer
 de datos suficientes, etiquetas verificadas y evaluación adicional.
+
+## Informe final
+
+El informe final se entrega en formato PDF a través de AVACO, según los
+lineamientos del curso.
