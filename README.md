@@ -146,8 +146,6 @@ Los datos son **sintéticos** y la etiqueta `prioridad_alta` del conjunto final 
 
 ---
 
-## Actividades anteriores del curso (histórico)
-
 ## Objetivo del proyecto
 
 Aplicar Python, análisis de datos e Inteligencia Artificial para procesar información de PQRS, identificar patrones y generar resultados que apoyen su gestión y priorización.
@@ -195,18 +193,20 @@ CursoIA/
 ├── docker-compose.yml
 └── requirements.txt
 ```
+## Actividades anteriores del curso (histórico)
+
 ### Análisis Exploratorio de Datos
 
 Para la Clase 4 se realizó un Análisis Exploratorio de Datos (EDA) sobre el archivo `data/pqrs/pqrs.csv`, utilizando NumPy y Matplotlib.
 
-### Variables analizadas
+#### Variables analizadas
 
 Se seleccionaron dos variables numéricas relacionadas con la gestión de PQRS:
 
 - `dias_abierta`: cantidad de días que una PQRS permanece abierta.
 - `cantidad_adjuntos`: cantidad de archivos adjuntos asociados a cada PQRS.
 
-### Estadísticas descriptivas
+#### Estadísticas descriptivas
 
 Para la variable `dias_abierta` se obtuvieron los siguientes resultados:
 
@@ -224,7 +224,7 @@ Para la variable `cantidad_adjuntos`:
 - Mínimo: 0 adjuntos.
 - Máximo: 4 adjuntos.
 
-### Visualizaciones
+#### Visualizaciones
 
 El análisis genera dos gráficos:
 
@@ -235,7 +235,7 @@ El análisis genera dos gráficos:
 ![Relación entre adjuntos y días abiertos](data/eda/dias_vs_adjuntos.png)
 - `data/eda/dias_vs_adjuntos.png`: muestra la relación entre la cantidad de adjuntos y los días que permanece abierta cada PQRS.
 
-### Patrones y relaciones encontradas
+#### Patrones y relaciones encontradas
 
 En el conjunto de datos utilizado se observa que las PQRS con mayor cantidad de archivos adjuntos también presentan una mayor cantidad de días abiertas.
 
@@ -243,7 +243,7 @@ El coeficiente de correlación entre `cantidad_adjuntos` y `dias_abierta` es apr
 
 Sin embargo, los datos utilizados son sintéticos y el conjunto contiene únicamente cinco registros. Por esta razón, esta correlación no permite concluir que la cantidad de adjuntos sea la causa de un mayor tiempo de atención. El resultado debe considerarse como un patrón inicial que podría verificarse posteriormente utilizando un conjunto de datos más amplio.
 
-### Relación con el futuro modelo de Inteligencia Artificial
+#### Relación con el futuro modelo de Inteligencia Artificial
 
 El análisis exploratorio permite identificar variables que podrían ser útiles para un futuro modelo de Inteligencia Artificial orientado a la gestión y priorización de PQRS.
 
