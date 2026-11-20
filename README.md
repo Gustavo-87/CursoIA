@@ -1,298 +1,208 @@
-# Curso de Inteligencia Artificial
+# Curso de Inteligencia Artificial — Clasificación de PQRS
 
-Repositorio académico para desarrollar las actividades del curso de Inteligencia Artificial y el proyecto **Resuelve**, una propuesta orientada al análisis de Peticiones, Quejas, Reclamos y Sugerencias (PQRS).
+Proyecto académico de clasificación de prioridad de Peticiones, Quejas, Reclamos y Sugerencias (PQRS) mediante Python, NumPy y Scikit-Learn. Se utilizan **150 registros sintéticos** para entrenar y comparar modelos.
 
-## Ejecución del proyecto final desde cero
+## Paso a paso para instalar y ejecutar el proyecto
 
-Esta es la **ruta recomendada para la evaluación del profesor**. Todos los comandos se ejecutan en una terminal, **desde la raíz de `CursoIA`**. El proyecto es una demostración de IA mediante scripts de Python: **no tiene servidor ni interfaz web que abrir**.
+**Sigue los pasos en orden.** Ejecuta cada comando en una terminal y comprueba su resultado antes de continuar. El proyecto funciona mediante scripts de Python dentro de Docker; **no requiere abrir una página web**.
 
-### 1. Requisitos previos
+### Paso 1. Instalar los programas necesarios
 
-- Tener instalados **Git** y **Docker** (Docker Desktop abierto en Windows/macOS, o Docker Engine en Linux).
-- Contar con conexión a Internet para descargar el código y construir la imagen por primera vez.
-- **No** es necesario instalar Python ni las bibliotecas en el equipo anfitrión.
+El computador debe contar con:
 
-Comprobar que Docker responde:
+- [Git](https://git-scm.com/downloads).
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows o macOS), o Docker Engine con Compose (Linux).
+- Conexión a Internet para la descarga inicial.
+
+Abre **Docker Desktop** y comprueba en una terminal que los programas estén disponibles:
 
 ```bash
+git --version
 docker --version
 docker compose version
+```
+
+Comprueba que el motor de Docker esté funcionando:
+
+```bash
 docker info
 ```
 
-Si `docker info` indica que el daemon no está disponible, iniciar Docker antes de continuar.
+**Resultado esperado:** los comandos muestran información de las versiones y del motor Docker, sin errores de conexión. Si `docker info` falla, inicia Docker Desktop y repite la comprobación.
 
-### 2. Descargar el proyecto
+**No es necesario instalar Python ni bibliotecas de Python en el computador.**
+
+### Paso 2. Descargar el repositorio
+
+En una terminal, ubícate en la carpeta donde desees guardar el proyecto y ejecuta:
 
 ```bash
 git clone https://github.com/Gustavo-87/CursoIA.git
+```
+
+Después, ingresa a la carpeta descargada:
+
+```bash
 cd CursoIA
 ```
 
-**No entrar en `proyectos/resuelve-pqrs/` para los pasos siguientes**: existen dos archivos `docker-compose.yml` en este repositorio. Esta guía utiliza exclusivamente el de la **raíz**, cuyo servicio se llama `python` (no `python_ia`).
+**Resultado esperado:** la terminal queda ubicada dentro de `CursoIA`.
 
-### 3. Construir la imagen Docker
+**Importante:** todos los comandos restantes se ejecutan **desde la raíz de `CursoIA`**, donde se encuentra el `docker-compose.yml` principal. No ingreses a `proyectos/resuelve-pqrs/` para ejecutar estos comandos.
 
-```bash
-docker compose build
-```
+### Paso 3. Verificar la configuración de Docker Compose
 
-El Dockerfile de la raíz utiliza Python 3.13 e instala las dependencias de `requirements.txt`. El primer proceso puede descargar paquetes de Internet.
-
-Comprobar el nombre del servicio:
+Ejecuta:
 
 ```bash
 docker compose config --services
 ```
 
-La salida debe incluir `python`. Los comandos `docker compose run --rm` crean un contenedor temporal para cada ejecución y lo eliminan al terminar; **no hace falta** ejecutar `docker compose up`.
+**Resultado esperado:**
 
-### 4. Preparación de datos y perceptrón del segundo corte
+```text
+python
+```
 
-Ejecutar en este orden:
+Si aparece `python_ia` o no aparece `python`, comprueba que la terminal esté en la raíz de `CursoIA` y no en la carpeta del subproyecto.
 
-**4.1.** Validar y preparar los 12 casos sintéticos originales:
+### Paso 4. Construir el entorno de ejecución
+
+Ejecuta:
+
+```bash
+docker compose build
+```
+
+**Resultado esperado:** Docker construye la imagen e instala las bibliotecas definidas en `requirements.txt` sin errores. La primera construcción requiere descargar la imagen de Python 3.13 y sus dependencias.
+
+Comprueba que Python funciona dentro del contenedor:
+
+```bash
+docker compose run --rm python python --version
+```
+
+**Resultado esperado:** se muestra `Python 3.13.x`.
+
+El comando `docker compose run --rm` ejecuta cada programa en un contenedor temporal. No es necesario ejecutar `docker compose up`.
+
+### Paso 5. Preparar los datos del segundo corte
+
+Ejecuta:
 
 ```bash
 docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/preparacion_pqrs.py --segundo-corte
 ```
 
-**4.2.** Regenerar los tres gráficos exploratorios y sus interpretaciones:
+**Resultado esperado:** el programa analiza **12 registros sintéticos**, valida su calidad y genera estos archivos:
+
+- `proyectos/resuelve-pqrs/data/pqrs_limpias_segundo_corte.csv`
+- `proyectos/resuelve-pqrs/data/pqrs_ml_segundo_corte.csv`
+- `proyectos/resuelve-pqrs/data/resumen_limpieza_segundo_corte.csv`
+
+### Paso 6. Generar los gráficos del segundo corte
+
+Ejecuta:
 
 ```bash
 docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/preparacion_pqrs.py --visualizaciones-segundo-corte
 ```
 
-**4.3.** Entrenar la neurona sigmoide implementada con NumPy:
+**Resultado esperado:** se generan tres gráficos y el archivo `interpretaciones.md` dentro de `proyectos/resuelve-pqrs/informes/segundo_corte/`.
+
+### Paso 7. Entrenar el perceptrón del segundo corte
+
+Ejecuta:
 
 ```bash
 docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/perceptron_proyecto.py
 ```
 
-Resultados de referencia: **12 registros**, exactitud de **9/12 (75 %)** en entrenamiento y pérdida final cercana a **0.5271**. Son métricas del segundo corte, **no** del modelo final.
+**Resultado esperado:** la terminal muestra los pesos, el sesgo, la pérdida y la exactitud de entrenamiento sobre los 12 casos. Como referencia, la exactitud documentada es **9/12 (75 %)**. Se generan la curva de aprendizaje y la frontera de decisión en `proyectos/resuelve-pqrs/informes/segundo_corte/perceptron/`.
 
-### 5. Generar datos y entrenar los modelos finales
+### Paso 8. Generar el conjunto de datos final
 
-**5.1.** Crear de manera reproducible el dataset final de 150 PQRS sintéticas (semilla 42):
+Ejecuta:
 
 ```bash
 docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/generar_datos.py
 ```
 
-Salida de referencia: **150 filas**; `prioridad_alta`: **120 de clase 0** y **30 de clase 1**.
+**Resultado esperado:** se crea o regenera `proyectos/resuelve-pqrs/data/pqrs_final_150.csv`, con **150 registros sintéticos**: 120 de prioridad no alta (0) y 30 de prioridad alta (1). El script utiliza la semilla 42.
 
-**5.2.** Entrenar el perceptrón final con NumPy y generar su curva de aprendizaje:
+### Paso 9. Entrenar el perceptrón final con NumPy
+
+Ejecuta:
 
 ```bash
 docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/perceptron_final.py
 ```
 
-**5.3.** Entrenar y comparar **regresión logística, KNN y árbol de decisión** con Scikit-Learn:
+**Resultado esperado:** se muestran las métricas de entrenamiento y prueba del perceptrón, y se genera `proyectos/resuelve-pqrs/graficos_final/curva_perceptron.png`.
+
+### Paso 10. Entrenar y comparar los modelos de clasificación
+
+Ejecuta:
 
 ```bash
 docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/modelo_proyecto.py
 ```
 
-El script realiza partición estratificada (120 entrenamiento / 30 prueba), validación cruzada de cinco pliegues sobre entrenamiento, cálculo de métricas y selección por **F1 promedio de validación cruzada**. Guarda el clasificador elegido en `proyectos/resuelve-pqrs/modelo_pqrs_final.joblib` y genera los gráficos de evaluación.
+**Resultado esperado:** la terminal presenta la comparación de **regresión logística, KNN y árbol de decisión**, con exactitud, precisión, recall y F1. El modelo se selecciona según el F1 promedio de validación cruzada de cinco pliegues.
 
-Resultado documentado con estos datos: **regresión logística**, F1 de validación cruzada cercano a **0.433**, exactitud de prueba **0.767** y recall de clase alta **0.333**. Las dependencias actuales no están fijadas a versiones exactas; pueden existir diferencias entre entornos.
+Además, se generan:
 
-### 6. Ejecutar predicciones con el modelo guardado
+- `proyectos/resuelve-pqrs/modelo_pqrs_final.joblib` — modelo seleccionado.
+- `proyectos/resuelve-pqrs/graficos_final/matriz_confusion.png`
+- `proyectos/resuelve-pqrs/graficos_final/real_vs_predicho.png`
 
-**Después** del paso 5.3:
+**Valores de referencia documentados:** regresión logística como modelo seleccionado, F1 de validación cruzada cercano a 0.433 y exactitud de prueba cercana a 0.767. Las versiones actuales de las bibliotecas no están fijadas en `requirements.txt`, por lo que los resultados pueden variar entre instalaciones.
+
+### Paso 11. Realizar predicciones con el modelo guardado
+
+Ejecuta este comando **después del paso 10**:
 
 ```bash
 docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/usar_modelo.py
 ```
 
-El programa **carga el archivo `.joblib` sin reentrenar** y muestra predicciones para tres casos académicos. En la ejecución documentada los resultados fueron **No alta, No alta y Alta**, respectivamente.
+**Resultado esperado:** el programa carga `modelo_pqrs_final.joblib` y muestra las predicciones de tres PQRS nuevas, sin volver a entrenar. Con el modelo documentado, sus clasificaciones son **No alta**, **No alta** y **Alta**.
 
-### 7. Ejecutar las pruebas automatizadas
+### Paso 12. Ejecutar las pruebas automatizadas
+
+Ejecuta:
 
 ```bash
 docker compose run --rm -e MPLBACKEND=Agg python python -m unittest discover -s proyectos/resuelve-pqrs/tests -v
 ```
 
-Se incluyen **19 pruebas** del segundo corte (preparación, gráficos y perceptrón). Una ejecución correcta termina con **`OK`**. Estas pruebas **no sustituyen** la verificación de los cuatro scripts finales de los pasos 5 y 6.
+**Resultado esperado:** se ejecutan las **19 pruebas automatizadas del segundo corte** y, si todas pasan, la salida termina con `OK`.
 
-### 8. Consultar resultados, informe y código
+Estas pruebas cubren la preparación de datos, las visualizaciones y el perceptrón del segundo corte. Los pasos 8 a 11 permiten verificar por separado el flujo del modelo final.
 
-| Elemento | Ubicación en el repositorio |
-|---|---|
-| Dataset final | `proyectos/resuelve-pqrs/data/pqrs_final_150.csv` |
-| Modelo guardado | `proyectos/resuelve-pqrs/modelo_pqrs_final.joblib` (generado al entrenar) |
-| Curva de aprendizaje final | `proyectos/resuelve-pqrs/graficos_final/curva_perceptron.png` |
-| Matriz de confusión | `proyectos/resuelve-pqrs/graficos_final/matriz_confusion.png` |
-| Real frente a predicho | `proyectos/resuelve-pqrs/graficos_final/real_vs_predicho.png` |
-| Resultados del segundo corte | `proyectos/resuelve-pqrs/informes/segundo_corte/` |
-| Código fuente y documentación técnica | [`proyectos/resuelve-pqrs/`](proyectos/resuelve-pqrs/README.md) |
-| **Informe final en PDF** | [**Consultar informe final**](proyectos/resuelve-pqrs/docs/Informe_Final_Integraci%C3%B3n%20de%20IA%20para%20la%20Gesti%C3%B3n%20de%20PQRS.pdf) |
+### Paso 13. Revisar los resultados y el informe
 
-Las rutas corresponden a la carpeta del repositorio; los archivos generados se guardan en el directorio local gracias al volumen de Docker Compose (`.:/app`).
+Los archivos generados quedan en el repositorio local, en las rutas indicadas en cada paso.
 
-### 9. Finalizar o repetir
+- [Código y documentación del proyecto de PQRS](proyectos/resuelve-pqrs/README.md)
+- [Carpeta de gráficos finales](proyectos/resuelve-pqrs/graficos_final/)
+- [Carpeta de informes del segundo corte](proyectos/resuelve-pqrs/informes/segundo_corte/)
+- [Informe final en PDF](proyectos/resuelve-pqrs/docs/Informe_Final_Integraci%C3%B3n%20de%20IA%20para%20la%20Gesti%C3%B3n%20de%20PQRS.pdf)
 
-Con `docker compose run --rm` los contenedores se eliminan después de cada comando. Para liberar recursos opcionalmente:
+### Paso 14. Finalizar
+
+No es necesario detener contenedores manualmente: `run --rm` elimina cada contenedor al finalizar. Para limpiar recursos de Docker Compose de manera opcional:
 
 ```bash
 docker compose down
 ```
 
-Para repetir la demostración, volver al **paso 4** y continuar en el orden indicado. Si solamente se quiere regenerar el modelo final, repetir los **pasos 5 a 7**.
+Para ejecutar nuevamente el proyecto, conserva la carpeta `CursoIA` y repite los pasos **5 a 12**. No es necesario clonar ni construir otra vez, salvo que cambien las dependencias o el Dockerfile.
 
-### Limitaciones de la demostración
+## Alcance
 
-Los datos son **sintéticos** y la etiqueta `prioridad_alta` del conjunto final se genera con una regla basada en las propias variables de entrada. Existe **circularidad metodológica**: las métricas describen el aprendizaje de esa regla artificial, **no** capacidad predictiva validada en PQRS reales. El sistema **no está integrado en producción con Resuelve ERP** ni debe utilizarse para asignar prioridades reales.
+Los datos de PQRS son **sintéticos**. En el conjunto final, la etiqueta de prioridad se obtiene mediante una regla basada en las mismas variables predictoras; por ello, las métricas no demuestran validez predictiva sobre solicitudes reales. El desarrollo es académico y no está integrado en producción con Resuelve ERP.
 
----
+## Otros materiales del curso
 
-## Objetivo del proyecto
-
-Aplicar Python, análisis de datos e Inteligencia Artificial para procesar información de PQRS, identificar patrones y generar resultados que apoyen su gestión y priorización.
-
-Los datos utilizados actualmente son simulados y no contienen información real de usuarios.
-
-## Tecnologías
-
-- Python 3
-- CSV y Markdown
-- Pandas
-- Docker y Docker Compose
-- Git y GitHub
-- Visual Studio Code
-
-## Estructura principal
-
-```text
-CursoIA/
-├── Clase 1/
-│   └── proyecto_resuelve_ia.md
-├── Clase 2/
-│   ├── analisis_de_datos.py
-│   ├── informe_proyecto.md
-│   └── investigacion_proyectos.md
-├── Clase 3/
-│   ├── analizar_cultivos.py
-│   ├── cultivos.csv
-│   ├── informe_cultivos.md
-│   ├── datos.txt
-│   ├── cultivos.json
-│   └── ejercicios de lectura, escritura y excepciones
-├── src/
-│   ├── analisis_pqrs.py
-│   ├── analisis_proyecto.py
-│   ├── cargar_datos.py
-│   ├── gestion_pqrs.py
-│   └── main.py
-├── proyectos/
-│   └── resuelve-pqrs/          # proyecto de IA aplicado a Resuelve
-│       ├── src/                # análisis, preparación ML y neuronas lógicas
-│       ├── data/               # datasets propios del proyecto (separados de data/)
-│       └── README.md           # problemática y alcance del proyecto
-├── Dockerfile
-├── docker-compose.yml
-└── requirements.txt
-```
-## Actividades anteriores del curso (histórico)
-
-### Análisis Exploratorio de Datos
-
-Para la Clase 4 se realizó un Análisis Exploratorio de Datos (EDA) sobre el archivo `data/pqrs/pqrs.csv`, utilizando NumPy y Matplotlib.
-
-#### Variables analizadas
-
-Se seleccionaron dos variables numéricas relacionadas con la gestión de PQRS:
-
-- `dias_abierta`: cantidad de días que una PQRS permanece abierta.
-- `cantidad_adjuntos`: cantidad de archivos adjuntos asociados a cada PQRS.
-
-#### Estadísticas descriptivas
-
-Para la variable `dias_abierta` se obtuvieron los siguientes resultados:
-
-- Media: 8.60 días.
-- Mediana: 8.00 días.
-- Desviación estándar: 4.41 días.
-- Mínimo: 3 días.
-- Máximo: 15 días.
-
-Para la variable `cantidad_adjuntos`:
-
-- Media: 2.00 adjuntos.
-- Mediana: 2.00 adjuntos.
-- Desviación estándar: 1.41.
-- Mínimo: 0 adjuntos.
-- Máximo: 4 adjuntos.
-
-#### Visualizaciones
-
-El análisis genera dos gráficos:
-
-![Histograma de días abiertos](data/eda/histograma_dias_abierta.png)
-
-- `data/eda/histograma_dias_abierta.png`: muestra la distribución del tiempo que permanecen abiertas las PQRS.
-
-![Relación entre adjuntos y días abiertos](data/eda/dias_vs_adjuntos.png)
-- `data/eda/dias_vs_adjuntos.png`: muestra la relación entre la cantidad de adjuntos y los días que permanece abierta cada PQRS.
-
-#### Patrones y relaciones encontradas
-
-En el conjunto de datos utilizado se observa que las PQRS con mayor cantidad de archivos adjuntos también presentan una mayor cantidad de días abiertas.
-
-El coeficiente de correlación entre `cantidad_adjuntos` y `dias_abierta` es aproximadamente `0.9943`, lo que representa una relación positiva muy fuerte dentro de este conjunto de datos.
-
-Sin embargo, los datos utilizados son sintéticos y el conjunto contiene únicamente cinco registros. Por esta razón, esta correlación no permite concluir que la cantidad de adjuntos sea la causa de un mayor tiempo de atención. El resultado debe considerarse como un patrón inicial que podría verificarse posteriormente utilizando un conjunto de datos más amplio.
-
-#### Relación con el futuro modelo de Inteligencia Artificial
-
-El análisis exploratorio permite identificar variables que podrían ser útiles para un futuro modelo de Inteligencia Artificial orientado a la gestión y priorización de PQRS.
-
-Variables como el tiempo de apertura, la cantidad de adjuntos, el tipo de solicitud y el estado podrían utilizarse posteriormente para identificar patrones, clasificar solicitudes o estimar cuáles PQRS pueden requerir mayor atención.
-
-Antes de construir un modelo predictivo será necesario disponer de una mayor cantidad de registros y evaluar otras variables relevantes del proceso de gestión de PQRS.
-
-### Avance 2
-
-El segundo corte se desarrolla en [`proyectos/resuelve-pqrs/`](proyectos/resuelve-pqrs/README.md#avance-2),
-separado de los ejercicios de clase y sin modificar Resuelve ERP.
-
-- **Preparación:** se conservan los 12 registros sintéticos originales y se
-  documentan etiquetas académicas `prioridad_alta` (0 = media/baja; 1 = alta).
-  Pandas verifica estructura, tipos, nulos, duplicados e inconsistencias.
-  No fueron necesarias correcciones: antes 12×6 y después 12×8, sin nulos.
-  Las clases contienen 8 casos de clase 0 y 4 de clase 1.
-- **Visualizaciones:** tres gráficos Seaborn con interpretaciones: histograma
-  de días, conteo por tipo y dispersión días–longitud según prioridad.
-  Se conservan los gráficos y datasets de etapas anteriores.
-- **Perceptrón sigmoide:** dos entradas estandarizadas (`dias_desde_radicacion`
-  y `longitud_descripcion`), pérdida logarítmica y descenso del gradiente con
-  NumPy, sin Scikit-Learn. Se usan 10000 épocas, tasa 0.1 e inicio en cero.
-- **Resultados:** `w1=1.5041201103`, `w2=1.9560568515`, `b=-1.1298185501`;
-  pérdida de `0.6931471806` a `0.5270863308`; exactitud de entrenamiento
-  **75 % (9/12)**. El conjunto no es linealmente separable y no se ha medido
-  generalización sobre datos independientes.
-- **Verificación:** 19 pruebas aprobadas en Docker (Python 3.13.16),
-  reproducibilidad numérica y de gráficos comprobada en dos ejecuciones.
-
-#### Ejecución en Docker (segundo corte)
-
-Desde la raíz de **CursoIA**, con Docker iniciado y el servicio único `python`:
-
-```bash
-docker compose build
-docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/preparacion_pqrs.py --segundo-corte
-docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/preparacion_pqrs.py --visualizaciones-segundo-corte
-docker compose run --rm -e MPLBACKEND=Agg python python proyectos/resuelve-pqrs/src/perceptron_proyecto.py
-docker compose run --rm -e MPLBACKEND=Agg python python -m unittest discover -s proyectos/resuelve-pqrs/tests -v
-```
-
-Los CSV preparados están en `proyectos/resuelve-pqrs/data/`. Los gráficos e
-interpretaciones están en
-[`informes/segundo_corte/interpretaciones.md`](proyectos/resuelve-pqrs/informes/segundo_corte/interpretaciones.md)
-y el análisis del modelo en
-[`perceptron/interpretacion.md`](proyectos/resuelve-pqrs/informes/segundo_corte/perceptron/interpretacion.md).
-Los comandos regeneran únicamente los archivos de su etapa, no el CSV original.
-
-Los resultados son académicos: muestra pequeña, sintética, desbalanceada y
-etiquetas subjetivas. No justifican uso operativo. La publicación en GitHub
-queda pendiente de autorización; no se generan PDF ni video en este avance.
+Las actividades de clases anteriores permanecen en las carpetas `Clase 1/`, `Clase 2/`, `Clase 3/`, `src/` y `data/`. El historial de preparación, perceptrón y modelos de PQRS se documenta en el [README del subproyecto](proyectos/resuelve-pqrs/README.md).
